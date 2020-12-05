@@ -8,7 +8,7 @@
 
 ## Strapi
 
-* First Name: Emmanuel
-* Last Name: Duarte
+* First Name: Won
+* Last Name: Games
 * email: emmanuelkant.duarte@gmail.com
 * password: Wongames123
