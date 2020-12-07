@@ -5,7 +5,7 @@
   "strapi": {
     "name": "Repositories",
     "icon": "code",
-    "description": "A list of our repositories."
+    "description": "A list of my repositories."
   },
   "dependencies": {},
   "author": {
