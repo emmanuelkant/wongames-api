@@ -2,7 +2,7 @@
 
 module.exports = {
   populate: async (ctx) => {
-    console.log('Starting to populate...')
+    console.info('Starting to populate...')
 
     const options = {
       page: '1',
@@ -12,6 +12,7 @@ module.exports = {
 
     await strapi.services.game.populate(options);
 
+    console.info('Starting to populate...')
     ctx.send('Finishing populate!');
   },
 };
