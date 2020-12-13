@@ -21,8 +21,8 @@
       "required": true
     },
     "games": {
-      "collection": "game",
       "via": "platforms",
+      "collection": "game",
       "dominant": true
     }
   }
