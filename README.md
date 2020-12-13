@@ -1,7 +1,5 @@
 <p align="center">
-  <div style="background: #fff;">
-    <img width="220" height="80" src="https://raw.githubusercontent.com/emmanuelkant/wongames-api/main/admin/src/assets/images/logo-won-dark.svg" alt="The wongames logo that is a videogame joystick and the letters W O N on right">
-  </div>
+  <img width="220" height="80" src="https://raw.githubusercontent.com/emmanuelkant/wongames-api/main/admin/src/assets/images/logo-won-dark.svg" alt="The wongames logo that is a videogame joystick and the letters W O N on right">
 </p>
 
 # Wongames API
