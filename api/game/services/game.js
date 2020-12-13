@@ -3,23 +3,31 @@
 const axios = require('axios');
 const slugify = require('slugify');
 
+function handleError(e) {
+  return { e, data: e.data && e.data.errors && e.data.errors };
+}
+
 // Use this in case you have some problem while uploading your gallery images
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function getGameInfo(slug) {
-  const jsdom = require('jsdom');
-  const { JSDOM } = jsdom;
-  const body = await axios.get(`https://www.gog.com/game/${slug}`);
-  const dom = new JSDOM(body.data);
-
-  const description = dom.window.document.querySelector('.description');
-
-  return {
-    rating: 'BR0',
-    short_description: description.textContent.slice(0, 160),
-    description: description.innerHTML,
+  try {
+    const jsdom = require('jsdom');
+    const { JSDOM } = jsdom;
+    const body = await axios.get(`https://www.gog.com/game/${slug}`);
+    const dom = new JSDOM(body.data);
+  
+    const description = dom.window.document.querySelector('.description');
+  
+    return {
+      rating: 'BR0',
+      short_description: description.textContent.slice(0, 160),
+      description: description.innerHTML,
+    }
+  } catch (error) {
+    console.log('getGameInfo', handleError(error));
   }
 };
 
@@ -113,37 +121,45 @@ async function createGames(products) {
 };
 
 async function setImage({ image, game, field = "cover" }) {
-  const url = `https:${image}_bg_crop_1680x655.jpg`;
-  const { data } = await axios.get(url, { responseType: "arraybuffer" });
-  const buffer = Buffer.from(data, "base64");
-
-  const FormData = require("form-data");
-  const formData = new FormData();
-
-  formData.append("refId", game.id);
-  formData.append("ref", "game");
-  formData.append("field", field);
-  formData.append("files", buffer, { filename: `${game.slug}.jpg` });
-
-  console.info(`Uploading ${field} image: ${game.slug}.jpg`);
-
-  await axios({
-    method: "POST",
-    url: `http://${strapi.config.host}:${strapi.config.port}/upload`,
-    data: formData,
-    headers: {
-      "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
-    },
-  });
+  try {
+    const url = `https:${image}_bg_crop_1680x655.jpg`;
+    const { data } = await axios.get(url, { responseType: "arraybuffer" });
+    const buffer = Buffer.from(data, "base64");
+  
+    const FormData = require("form-data");
+    const formData = new FormData();
+  
+    formData.append("refId", game.id);
+    formData.append("ref", "game");
+    formData.append("field", field);
+    formData.append("files", buffer, { filename: `${game.slug}.jpg` });
+  
+    console.info(`Uploading ${field} image: ${game.slug}.jpg`);
+  
+    await axios({
+      method: "POST",
+      url: `http://${strapi.config.host}:${strapi.config.port}/upload`,
+      data: formData,
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    });
+  } catch (error) {
+    console.log('setImage', handleError(error));
+  }
 }
 
 module.exports = {
   populate: async (params) => {
-    const gogApiUrl = `https://www.gog.com/games/ajax/filtered?mediaType=game&page=1&sort=popularity`;
-    const { data: { products } } = await axios.get(gogApiUrl);
-
-    await createManyToMany([products[0], products[1], products[2], products[3], products[4]]);
-    await createGames([products[0], products[1], products[2], products[3], products[4]]);
-    console.log('Call the service pupulate');
+    try {
+      const gogApiUrl = `https://www.gog.com/games/ajax/filtered?mediaType=game&page=1&sort=popularity`;
+      const { data: { products } } = await axios.get(gogApiUrl);
+  
+      await createManyToMany(products);
+      await createGames(products);
+      console.log('Call the service pupulate');
+    } catch (error) {
+      console.log('populate', handleError(error));
+    }
   },
 };
