@@ -25,7 +25,7 @@ async function getByName(name, entityName) {
 
 async function create(name, entityName) {
   const item = await getByName(name, entityName);
-
+  console.log('here', item);
   if (!item) {
     await strapi.services[entityName].create({
       name,
@@ -34,13 +34,41 @@ async function create(name, entityName) {
   }
 };
 
+async function createManyToMany(products) {
+  const developers = {};
+  const publishers = {};
+  const categories = {};
+  const platforms = {};
+
+  products.forEach(product => {
+    const { developer, publisher, genres, supportedOperatingSystems } = product;
+
+    genres && genres.forEach(item => {
+      categories[item] = true;
+    });
+
+    supportedOperatingSystems && supportedOperatingSystems.forEach(item => {
+      platforms[item] = true;
+    });
+
+    developers[developer] = true;
+    publishers[publisher] = true;
+
+    return Promise.all([
+      ...Object.keys(developers).map(name => create(name, 'developer')),
+      ...Object.keys(publishers).map(name => create(name, 'publisher')),
+      ...Object.keys(categories).map(name => create(name, 'category')),
+      ...Object.keys(platforms).map(name => create(name, 'platform')),
+    ]);
+  });
+}
+
 module.exports = {
   populate: async (params) => {
     const gogApiUrl = `https://www.gog.com/games/ajax/filtered?mediaType=game&page=1&sort=popularity`;
     const { data: { products } } = await axios.get(gogApiUrl);
 
-    await create(products[2].publisher, 'publisher');
-    await create(products[2].developer, 'developer');
+    await createManyToMany([products[0], products[1], products[2], products[3], products[4]])
 
     console.log('Call the service pupulate');
   },
