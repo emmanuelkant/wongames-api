@@ -1,5 +1,7 @@
 <p align="center">
-  <img width="220" height="80" src="https://raw.githubusercontent.com/emmanuelkant/wongames-api/main/admin/src/assets/images/logo-won-dark.svg">
+  <div style="background: #fff;">
+    <img width="220" height="80" src="https://raw.githubusercontent.com/emmanuelkant/wongames-api/main/admin/src/assets/images/logo-won-dark.svg" alt="The wongames logo that is a videogame joystick and the letters W O N on right">
+  </div>
 </p>
 
 # Wongames API
@@ -10,7 +12,7 @@ This is the backend of my main project, the WonGame that I made following the
 course React Avançado from 
 
 <p align="center">
-  <img width="460" height="300" src="https://raw.githubusercontent.com/emmanuelkant/wongames-api/main/Initial_Image.png">
+  <img src="https://raw.githubusercontent.com/emmanuelkant/wongames-api/main/Initial_Image.png" alt="Image of project's inital page that is showing all signed games with the sidebar menu on left.">
 </p>
 
 ## Access the project
