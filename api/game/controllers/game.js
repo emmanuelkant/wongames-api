@@ -9,7 +9,7 @@ module.exports = {
       sort: 'popularity',
       ...ctx.query,
     };
-
+    console.log(options)
     await strapi.services.game.populate(options);
 
     console.info('Starting to populate...')
